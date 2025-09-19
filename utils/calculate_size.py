@@ -81,9 +81,9 @@ def get_assets(soup):
         a = a['href'].split('?')[0]
         if a not in assets:
             assets.append(a)
-    for s in soup.findAll('script'):
-        if ['src'] in s:
-            s = s['src']
+    for s in soup.findAll("script"):
+        if "src" in s.attrs:
+            s = s["src"]
             if s not in assets:
                 assets.append(s)
 

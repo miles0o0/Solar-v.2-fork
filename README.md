@@ -1,219 +1,284 @@
 # Solar v.2
 
-- Rebuild of Low-tech Magazine's Solar theme with Hugo
-- Builds the entire site in minutes rather than hours :)
-- Makes use of additional taxonomies that are possible in Hugo
+A high-performance Hugo theme for content publication built on the original [Solar v.2 theme](https://github.com/lowtechmag/solar) by Low-tech Magazine.
 
-Requires Hugo 0.145 or newer!
 
-## Local Development
-```
+**Requires Hugo 0.145 or newer**
+
+---
+
+## 🚀 Getting Started
+
+### Installation & Development
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd solar_v2
+
+# Start development server
 hugo server
+
+# Open browser to http://localhost:1313
 ```
 
-## Organizing content
+The development server watches for changes and auto-rebuilds the site.
 
-Content is organized as [Hugo Page Bundles](https://gohugo.io/content-management/page-bundles/).
-
-That means that each post is a directory which contains: 
-
-* the article (`index.md`)
-* the translations (`index.lang.md`)
-* the images in the article (`images/`)
-* dithered versions of the images (`images/dithers/`)
-* comments in various languages (`comments.en.md`) 
-
-Example:
-
-```
-how-to-build-a-low-tech-internet/
-├── comments.en.md
-├── images
-│   ├── air-jaldi-epostman.png
-│   ├── dithers
-│   │   ├── air-jaldi-epostman_dithered.png
-│   │   ├── freifunk-wifi-node_dithered.png
-│   │   ├── node-air-jaldi-network_dithered.png
-│   │   ├── node-spanish-guifi-network_dithered.png
-│   │   ├── node-tegola_dithered.png
-│   │   ├── sneakernet-on-rails_dithered.png
-│   │   ├── tegola-project-low-tech-internet_dithered.png
-│   │   ├── wifi-link_dithered.png
-│   │   └── wireless-links-spanish-guifi-network_dithered.png
-│   ├── freifunk-wifi-node.jpg
-│   ├── node-air-jaldi-network.png
-│   ├── node-spanish-guifi-network.png
-│   ├── node-tegola.jpg
-│   ├── sneakernet-on-rails.jpg
-│   ├── tegola-project-low-tech-internet.png
-│   ├── wifi-link.jpg
-│   └── wireless-links-spanish-guifi-network.jpg
-├── index.de.md
-├── index.en.md
-├── index.es.md
-└── index.fr.md
-```
-At least one article is required: `index.md` or `index.lang.md`.
-
-## Formatting articles
-
-The design relies on the following [front matter](https://gohugo.io/content-management/front-matter/) fields:
-
-```
 ---
-title: "How to Build a Low-tech Internet"
-date: "2015-10-26"
-summary: "If we want the internet to keep working in circumstances where access to energy is more limited, we can learn important lessons from alternative network technologies."
-slug: "how-to-build-a-low-tech-internet"
-lang: "en"
-authors: ["Kris De Decker"]
-categories: ["Low-tech Solutions"]
-tags: ["ICT"]
-featured_image: "tegola-project-low-tech-internet.png"
-draft: false
+
+## 📝 Creating Articles with YAML
+
+All articles are created using a **YAML-based article creation system**. Instead of manually creating Hugo page bundles.
+
+### Quick Start - Create Your First Article
+
+**Step 1:** Create a YAML file
+
+```bash
+cp article.example.yaml my-first-article.yaml
+```
+
+**Step 2:** Edit the file with your content
+
+```yaml
+metadata:
+  title: "My Article Title"           # Display name
+  slug: "my-article-title"            # URL slug (kebab-case, no spaces)
+  date: "2025-02-24"                  # Publication date (YYYY-MM-DD)
+  summary: "Short article summary"    # Shown in article listings
+  language: "en"                      # Language code
+  authors:
+    - "Your Name"
+  categories:
+    - "On Going Projects"             # Choose one category
+  tags:
+    - "optional"
+    - "tags"
+
+content: |
+  ## Your Article Heading
+
+  Start writing your article here in Markdown format.
+
+  {{% figure src="image1.png" %}}
+  Image caption goes here
+  {{% /figure %}}
+
+  ## Another Section
+
+  More article content...
+
+images:
+  - filename: "image1.png"
+  - filename: "image2.jpg"
+  - filename: "image3.jpeg"
+```
+
+**Step 3:** Prepare your images
+
+```bash
+mkdir my-article-images/
+# Copy all your images into this folder
+cp ~/Downloads/*.png ~/Downloads/*.jpg my-article-images/
+```
+
+**Step 4:** Generate the article
+
+```bash
+./utils/dev.sh my-first-article.yaml --source-dir my-article-images/
+```
+
+This command:
+- Parses your YAML file
+- Creates the proper Hugo page bundle structure
+- Dithers all images (for low-bandwidth readers)
+- Reloads Hugo in your browser
+- Your article is now live at `http://localhost:1313`
+
+### YAML File Structure
+
+```yaml
+metadata:
+  title: String (required)
+  slug: String (required, kebab-case)
+  date: YYYY-MM-DD (required)
+  summary: String (required, shown in listings)
+  language: "en" (required)
+  authors: List (required)
+    - "Author Name"
+    - "Another Author"
+  categories: List (required, choose one)
+  tags: List (optional)
+    - "tag1"
+    - "tag2"
+  featured_image: String (optional, filename from images/)
+  draft: Boolean (optional, set to true to hide)
+
+content: |
+  # Markdown content here
+  Use {{% figure src="image.png" %}}Caption{{% /figure %}} for images
+  
+images:
+  - filename: "image1.png"
+  - filename: "image2.jpg"
+```
+
+### Article Categories
+
+Choose **exactly one** category for each article:
+
+- **On Going Projects** - Active, ongoing work in progress
+- **Project Outputs** - Completed project results and deliverables
+- **Other** - Miscellaneous content
+
+### Image Usage in Articles
+
+```markdown
+{{% figure src="my-image.png" %}}
+This caption describes what the image shows
+{{% /figure %}}
+```
+
+Features:
+- **Automatic dithering** - Creates low-bandwidth versions for readers
+- **Toggle button** - Readers can switch between dithered/original versions
+- **Auto-compression** - Original images optimized to WebP format
+
 ---
-```
 
-In the case of a translation you can specify the translators as well:
-
-__!! Careful, only some metadata should to be translated, the other needs to be left intact.__
-
-Specifically, the metadata keys (`title`, `date`, `summary` etc.) should remain intact wheras the metadata values can be translated (such as the contents of `title` or `summary`).
-
-However do __not__ translate the values of `slug`, `categories`, `tags` and `featured_image`.
+## 📁 Project Structure
 
 ```
+solar_v2/
+├── content/                    # Article page bundles
+│   ├── article-template-how-to/
+│   │   ├── index.en.md
+│   │   ├── images/
+│   │   │   ├── image.png
+│   │   │   └── dithers/
+│   │   │       └── image_dithered.png
+│   │   └── comments.en.md
+│   └── solar-powered-website-design/
+│       └── ...
+│
+├── layouts/                    # Hugo templates
+│   ├── _default/
+│   │   ├── single.html        # Article page template
+│   │   ├── list.html          # Article listings
+│   │   └── baseof.html        # Base template
+│   └── partials/
+│       ├── header.html
+│       ├── footer.html
+│       ├── nav.html
+│       └── figure.html        # Image shortcode template
+│
+├── assets/css/                 # SCSS stylesheets
+│   └── style.scss
+│
+├── static/                     # Static files
+│   ├── js/
+│   │   └── script.js          # Image toggle, menu toggle
+│   └── icons/
+│
+├── utils/                      # Utility scripts
+│   ├── dev.sh                 # Article generation + Hugo dev server
+│   ├── create_article.py      # YAML parser
+│   ├── dither_images.py       # Image dithering
+│   ├── calculate_size.py      # Page size calculator
+│   ├── build_site.sh          # Production build script
+│   └── clean_output.py        # Output cleanup
+│
+├── hugo.toml                   # Hugo configuration
+├── article.example.yaml        # Example article template
+├── README.md                   # This file
+└── LICENSE                     # AGPL 3.0
+```
+
 ---
-title: "Cómo construir una Internet de Baja Tecnología" #TO TRANSLATE
-date: "2015-10-26"
-summary: "Si queremos que internet siga funcionando en circunstancias en que el acceso a la energía es más limitado, entonces podemos aprender lecciones importantes de las tecnologías de red alternativas." #TO TRANSLATE
-slug: "how-to-build-a-low-tech-internet"
-lang: "es" #ADD THE CORRECT LANG code (fr, es, etc.)
-authors: ["Kris De Decker"]
-categories: ["Low-tech Solutions"]
-tags: ["ICT"] 
-featured_image: "tegola-project-low-tech-internet.png"
-translators: ["Colectivo Disonancia"] #ADD TRANSLATOR FOR THIS LANGUAGE
-draft: false
+
+## 🛠️ Utility Scripts
+
+All scripts are in the `utils/` directory.
+
+### Article Generation (`utils/dev.sh`)
+
+Converts YAML articles to Hugo format and starts dev server:
+
+```bash
+./utils/dev.sh article.yaml --source-dir ./images/
+```
+
+Options:
+- `--source-dir` - Directory containing article images
+- Automatically dithers images
+- Launches Hugo server on port 1313
+
+### Image Dithering (`utils/dither_images.py`)
+
+Creates low-bandwidth versions of images using dithering algorithm.
+
+**Install dependencies:**
+```bash
+pip install Pillow git+https://www.github.com/hbldh/hitherdither
+```
+
+**Usage:**
+```bash
+# Dither all images in content folder
+python3 utils/dither_images.py --directory content/
+
+# Dither with category-based color effects
+python3 utils/dither_images.py --directory content/ --colorize
+
+# Verbose output to see progress
+python3 utils/dither_images.py --directory content/ --verbose
+
+# Remove all dithered versions
+python3 utils/dither_images.py --remove --directory content/
+```
+
+Dithered images are placed in `images/dithers/` subfolder.
+
 ---
-```
 
-To add several authors or several tags, we use the following syntax: 
+## 📄 License & Credits
 
-```
+**License:** AGPL 3.0 - See LICENSE file for details
+
+### Original Theme Creators
+
+This project is built on the Solar v.2 theme, originally created by:
+
+- **Marie Otsuka** (https://motsuka.com/)
+- **Roel Roscam Abbing** (https://test.roelof.info)
+- **Marie Verdeil** (https://verdeil.net/)
+
+With contributions from:
+- **Erhard Maria Klein** (http://www.weitblick.de/)
+
+### Original Project
+
+- [Solar v.2 GitHub Repository](https://github.com/lowtechmag/solar)
+- [Low-tech Magazine](https://solar.lowtechmagazine.com)
+
 ---
-authors: ["Kris De Decker", "Marie Verdeil"]
-tags: ["ICT", "another tag", "another other tag"]
+
+## 📖 Learn More
+
+### Hugo Documentation
+
+- [Hugo Getting Started](https://gohugo.io/getting-started/)
+- [Page Bundles](https://gohugo.io/content-management/page-bundles/)
+- [Markdown Guide](https://gohugo.io/content-management/formats/)
+
+### Next Steps
+
+1. **Create your first article** using `article.example.yaml`
+2. **Add images** to your article folder
+3. **Run `./utils/dev.sh`** to generate and preview
+4. **Test on mobile** to check responsiveness
+5. **Deploy** using `hugo && scp -r public/* server:/path`
+
 ---
-``` 
-### Image shortcodes
 
-The design relies on shortcodes for images rather than markdown image tags:
-
-`{{% figure src="yutampo2.png" %}} Una borsa d’acqua calda giapponese detta yutampo, fatta di plastica rigida. Fonte: All About Japan. [https://allabout-japan.com/en/article/6244/](https://allabout-japan.com/en/article/6244/) {{% /figure %}}
-`
-
-
-### Reader comments
-If there are any comments to be rendered under an article they should be in a file called `comments.lang.md` and each comment rendered as such:
-```
-{{< comment name="Lord Byron" >}}
-As the Liberty lads o'er the sea
-Bought their freedom, and cheaply, with blood
-So we, boys, we
-Will die fighting, or live free,
-And down with all kings but King Ludd” 
-{{</ comment >}}
-```
-
-### Internal links
-To link to other articles on the solar website, we use a hugo specific shortcode to call the article folder. This has several advantages: 
-1. The url will not break if the article `title` or `date` change, since we are calling the file itself. 
-2. When used in a transaltion, the shortcode automatically points to the translated article, if it exists, or defaults to english. 
-- _Sytnax:_
-```go
-[Text]({{< ref "/path-to-folder" >}})
-``` 
-- _Examples:_
-```go
-[Donate]({{< ref "/donate" >}})
-[here]({{< ref "/posts/power-water-networks/" >}})
-```
-
-
-## Author & Translator pages
-
-This site builds custom taxonomies for `Authors` and `Translators` which can be accessed via `http://localhost:1313/authors/` and `http://localhost:1313/translators/` respectively. Individual data about each author or translator can be written in `content/authors/authorname/index.md`
-
-
-# Additional utilities
-
-In `utils` there are various utilities to be used before or after site rendering. 
-
-## dithering tool
-
-`dither_images.py` recursively traverses folders and creates dithered versions of the images it finds. These are stored in the same folder as the images in a folder called "dithers".
-
-### Installation & Depedencies
-
-depends on [Pillow](https://pillow.readthedocs.io) and [hitherdither](https://github.com/hbldh/hitherdither)
-
-`pip install Pillow git+https://www.github.com/hbldh/hitherdither`
-
-### Usage
-
-Dither all the images found in the subdirectories of `content` 
-`python3 utils/dither_images.py --directory content/`
-
-Colorize the dithers as well based on the LTM categories:
-`python3 utils/dither_images.py --directory content/ --colorize`
-
-Run the script with more debug output:
-`python3 utils/dither_images.py --directory content/ --colorize --verbose`
-
-Remove all dithered files in the subdirectories of `content`:
-`python3 utils/dither_images.py --remove --directory content/`
-
-## Page Size Calculator
-
-This script recursively traverses folders and enumerates the file size of all html pages and associated media.
-The calculated total file size is then added to the HTML page. The script looks for a `div` with class `page-size` to add the page metadata in to. This div is currently found in `layouts/partials/footer.html`
-
-#### Installation & Dependencies
-
-Relies on BeautifulSoup
-
-`pip install bs4`
-
-
-#### Usage
-
-This script should be run *after* the site has been generated on the resulting files. It is a post-processing step.
-In the case of Hugo, this is usually the directory called `public`. Add the baseurl that you also use in production:
-
-`python3 utils/calculate_size.py --directory public/ --baseURL https://solar.lowtechmagazine.com`
-
-## build_site.sh
-
-This is a script to build the hugo site and run the various support scripts. It assumes you generate and deploy the site on the same machine.
-
-It can be used in `cron` to make a daily build at 12:15 and log the output. 
-
-`15 12 * * * /bin/bash /path/to/repo/utils/build_site.sh > /path/to/build.log 2>&1`
-
-# Contributions
-
-The Solar v.2 theme was made by
-
-* [Marie Otsuka](https://motsuka.com/)[^1]
-* [Roel Roscam Abbing](https://test.roelof.info)[^1]
-* [Marie Verdeil](https://verdeil.net/)
-
-With contributions by
-* [Erhard Maria Klein](http://www.weitblick.de/)
-
-# Donations
-
-If Low-Tech Magazine or this theme has been useful to your work, please support us by making a one time donation [through Paypal](https://www.paypal.com/paypalme/lowtechmagazine) or a recurring one [through Patreon](https://solar.lowtechmagazine.com/donate/) 
-
-[^1]: Marie and Roel created the [original Pelican theme](https://github.com/lowtechmag/solar) for the first version of https://solar.lowtechmagazine.com
+**Happy writing! 🌻**

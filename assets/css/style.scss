@@ -34,9 +34,9 @@
     --color-sky: #f0f8ff;
     --color-sub: rgb(130 130 130);
     --color-bg: #fff5d1;
-    --color-low: #162dab;
-    --color-high: #d11305;
-    --color-obs: #006951;
+    --color-ongoing: #162dab;
+    --color-outputs: #d11305;
+    --color-other: #006951;
     --pad-small: 0.25rem;
     --pad: 0.5rem;
     --pad-large: 1rem;
@@ -90,8 +90,14 @@ h1 {
     text-indent: -.15rem;
 }
 
+h2, h3, h4, h5, h6 {
+    letter-spacing: -0.02em;
+    margin-bottom: var(--pad-section);
+}
+
 p {
     line-height: 1.4;
+    margin-bottom: var(--pad-large);
 }
 
 a {
@@ -99,9 +105,19 @@ a {
     text-decoration: none;
     padding-bottom: 0.05em;
     border-bottom: 1px solid;
-    &:hover {
+    transition: color 0.1s, opacity 0.1s;
+    
+    &:hover,
+    &:focus {
         color: var(--color-sub);
-        text-decoration: none;
+        text-decoration: underline;
+        opacity: 0.7;
+    }
+    
+    // Phase 3: Smooth focus state for keyboard navigation
+    &:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
     }
 }
 
@@ -131,6 +147,48 @@ footer {
     border-top: 2px solid var(--color-primary);
 }
 
+// Phase 1: Section visual dividers
+section {
+    &:not(:first-child) {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        padding-top: var(--pad-section);
+        margin-top: var(--pad-section);
+    }
+}
+
+// Phase 3: Fine-tune overall visual balance
+article {
+    // Better article spacing
+    h1, h2, h3 {
+        margin-top: var(--pad-xlarge);
+        margin-bottom: var(--pad-large);
+        letter-spacing: -0.02em;
+        
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+    
+    p {
+        line-height: 1.5;
+        margin-bottom: var(--pad-large);
+    }
+    
+    ul, ol {
+        margin: var(--pad-xlarge) 0;
+    }
+    
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+// Phase 3: Consistent border and spacing across all elements
+blockquote, .longquote, details {
+    margin: var(--pad-xlarge) 0;
+}
+
 .site-header,
 .site-footer {
     a {
@@ -143,6 +201,15 @@ footer {
     h1 {
         text-transform: uppercase;
     }
+}
+
+.site-footer {
+    // Phase 2: Better footer styling
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin-top: var(--pad-section);
+    padding-top: var(--pad-xlarge);
+    color: var(--color-sub);
+    font-size: var(--font-small);
 }
 
 
@@ -160,17 +227,12 @@ BACKGROUND and BATTERY METER
 
 #battery {
     background: var(--color-sky);
+    display: none;
 }
 
+// Hide battery display percentage and icon
 #battery_data {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    z-index: 100;
-    font-size: 0.75rem;
-    text-align: right;
-    padding: 3px .5rem 0 0;
-    pointer-events: none;
+    display: none;
 }
 
 a[title="Power"] {
@@ -248,22 +310,25 @@ a:hover {
 CATEGORY COLORS
 -----------*/
 
-[data-nav="low-tech-solutions"],
-li.low-tech-solutions .category,
-#low-tech-solutions header h1 {
-    color: var(--color-low);
+[data-nav="on-going-projects"],
+li.on-going-projects .category,
+#on-going-projects header h1,
+nav [data-nav="on-going-projects"] {
+    color: var(--color-ongoing) !important;
 }
 
-[data-nav="high-tech-problems"],
-li.high-tech-problems .category,
-#high-tech-problems header h1 {
-    color: var(--color-high);
+[data-nav="project-outputs"],
+li.project-outputs .category,
+#project-outputs header h1,
+nav [data-nav="project-outputs"] {
+    color: var(--color-outputs) !important;
 }
 
-[data-nav="obsolete-technology"],
-li.obsolete-technology .category,
-#obsolete-technology header h1 {
-    color: var(--color-obs);
+[data-nav="other"],
+li.other .category,
+#other header h1,
+nav [data-nav="other"] {
+    color: var(--color-other) !important;
 }
 
 
@@ -278,6 +343,43 @@ NAVIGATION
 nav {
     a {
         border-bottom: none;
+        // Phase 3: Smooth focus state transitions
+        transition: color 0.15s ease-out, text-shadow 0.15s ease-out;
+        
+        &:focus-visible {
+            text-decoration: underline;
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+        
+        // Phase 3: Active navigation item styling
+        &.active {
+            font-weight: bold;
+            text-decoration: underline;
+            color: var(--color-primary);
+        }
+        
+        // Preserve category colors when active
+        &.active[data-nav="on-going-projects"] {
+            color: var(--color-ongoing) !important;
+        }
+        &.active[data-nav="project-outputs"] {
+            color: var(--color-outputs) !important;
+        }
+        &.active[data-nav="other"] {
+            color: var(--color-other) !important;
+        }
+    }
+    
+    // Target links within active list items for category colors
+    li.active a[data-nav="on-going-projects"] {
+        color: var(--color-ongoing) !important;
+    }
+    li.active a[data-nav="project-outputs"] {
+        color: var(--color-outputs) !important;
+    }
+    li.active a[data-nav="other"] {
+        color: var(--color-other) !important;
     }
     &#menu>ul {
         li {
@@ -424,34 +526,75 @@ METADATA, BYLINES
 
 .metadata {
     color: var(--color-sub);
-    margin: var(--pad) 0;
+    margin: var(--pad) 0 var(--pad-large);
     font-size: var(--font-small);
     font-family: var(--monospace);
     display: flex;
     width: 100%;
+    // Phase 3: Better metadata visual hierarchy
+    transition: color 0.2s ease-out;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: var(--pad-large);
+    
     div {
         margin-right: var(--pad-large);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
+    
     a {
         color: var(--color-sub);
+        transition: color 0.15s ease-out;
+        
+        &:hover {
+            color: var(--color-primary);
+        }
     }
    
-    .byline, .author{
+    .byline, .author {
+        // Phase 3: Better author formatting
+        font-weight: 500;
+        
         @include media(mobile) {
-            display: block; 
-            line-height: 1.4;      
-        }        
+            display: block;
+            line-height: 1.4;
+            margin-bottom: var(--pad);
+        }
     }
-   
-
+    
+    // Phase 3: Better date styling
+    time {
+        display: inline;
+        margin: 0;
+    }
 }
 
 .tags {
     font-family: var(--monospace);
+    // Phase 3: Better tag/category badge styling
+    margin: var(--pad-large) 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .tag {
-    margin-right: 0.5em;
+    margin-right: 0;
+    // Phase 3: Enhanced tag badges
+    display: inline-block;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 0.25rem 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    transition: all 0.15s ease-out;
+    font-size: 0.85em;
+    
+    &:hover {
+        background: rgba(0, 0, 0, 0.08);
+        border-color: rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+    }
 }
 
 
@@ -475,10 +618,80 @@ time {
     time {
         margin-top: var(--pad-small);
     }
+    
+    // Phase 1: Article card styling with category colors
+    .article {
+        border-left: 4px solid transparent;
+        padding-left: var(--pad);
+        padding-right: var(--pad);
+        padding: var(--pad);
+        margin: -var(--pad);
+        margin-bottom: -var(--pad);
+        // Phase 3: Smooth transitions on article cards
+        transition: background-color 0.15s ease-out, transform 0.1s ease-out;
+        border-radius: 2px;
+        
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+            transform: translateX(2px);
+        }
+        
+        &:focus-within {
+            background-color: rgba(0, 0, 0, 0.04);
+            outline: 2px solid rgba(0, 0, 0, 0.1);
+            outline-offset: 0;
+        }
+        
+        // Make entire article box clickable
+        a {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            border: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            
+            &:hover {
+                text-decoration: none;
+            }
+        }
+        
+        // Category color indicators
+        &.ongoing-projects {
+            border-left-color: var(--color-ongoing);
+        }
+        
+        &.project-outputs {
+            border-left-color: var(--color-outputs);
+        }
+        
+        &.other {
+            border-left-color: var(--color-other);
+        }
+    }
 }
 
 .cover {
     grid-column: 1/-1;
+    
+    // Phase 1: Add colored borders to featured article
+    border-left: 4px solid transparent;
+    padding-left: var(--pad);
+    
+    &.ongoing-projects {
+        border-left-color: var(--color-ongoing);
+    }
+    
+    &.project-outputs {
+        border-left-color: var(--color-outputs);
+    }
+    
+    &.other {
+        border-left-color: var(--color-other);
+    }
+    
     a {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -505,6 +718,40 @@ time {
     }
     .entry-title {
         margin-top: 0;
+    }
+}
+
+// Phase 1: Featured article highlighting
+.article-list-featured {
+    grid-column: 1 / -1;
+    background: linear-gradient(to right, rgba(22, 45, 171, 0.05) 0%, transparent 100%);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: var(--pad-xlarge);
+    margin-bottom: var(--pad-section);
+    // Phase 3: Smooth transitions for featured article
+    transition: all 0.2s ease-out;
+    border-radius: 2px;
+    position: relative;
+    
+    &:hover {
+        background: linear-gradient(to right, rgba(22, 45, 171, 0.1) 0%, transparent 100%);
+        border-color: rgba(22, 45, 171, 0.3);
+        box-shadow: 0 2px 8px rgba(22, 45, 171, 0.1);
+    }
+    
+    &:focus-within {
+        outline-offset: 0;
+    }
+    
+    .featured-img {
+        margin-top: 0;
+        margin-bottom: var(--pad-large);
+        // Phase 3: Refined featured image transitions
+        transition: transform 0.2s ease-out;
+        
+        &:hover {
+            transform: scale(1.01);
+        }
     }
 }
 
@@ -760,14 +1007,34 @@ img {
 }
 
 figure {
-    overflow: hidden;
     margin: auto;
     margin-top: var(--pad-xlarge);
+    overflow: hidden;
+    
+    img {
+        // Phase 3: Refined image transitions at 60fps
+        display: block;
+    }
+    
     &[data-imgstate="dither"] {
         mix-blend-mode: multiply;
     }
     &[data-imgstate="undither"] {
         mix-blend-mode: normal;
+    }
+    
+    figcaption {
+        font-style: italic;
+        font-size: 0.95em;
+        color: var(--color-sub);
+        margin-top: var(--pad-large);
+        line-height: 1.4;
+        // Phase 3: Better caption transitions
+        transition: color 0.2s ease-out;
+        
+        &:hover {
+            color: var(--color-primary);
+        }
     }
 }
 
@@ -790,21 +1057,19 @@ figure {
     font-size: .8em;
 }
 
-[data-imgstate="undither"]+.figure-controls {
-    .view-orig {
-        display: none;
-    }
-    .view-dither {
+.article-img {
+    figure[data-imgstate="dither"] ~ .figure-controls .view-orig {
         display: inline;
     }
-}
-
-[data-imgstate="dither"]+.figure-controls {
-    .view-orig {
-        display: inline;
-    }
-    .view-dither {
+    figure[data-imgstate="dither"] ~ .figure-controls .view-dither {
         display: none;
+    }
+    
+    figure[data-imgstate="undither"] ~ .figure-controls .view-orig {
+        display: none;
+    }
+    figure[data-imgstate="undither"] ~ .figure-controls .view-dither {
+        display: inline;
     }
 }
 
@@ -818,15 +1083,16 @@ figure {
     height: 1em;
     top: 3px;
     position: relative;
+    cursor: pointer;
     &:hover {
         cursor: pointer;
         .svg_fill {
             fill: var(--color-sub);
         }
-        &+.imgindicator {
-            // position: absolute;
-            visibility: visible;
-        }
+    }
+    &:hover+.imgindicator {
+        // position: absolute;
+        visibility: visible;
     }
 }
 
@@ -925,6 +1191,26 @@ COMMENTS & DROPDOWNS
     details {
         margin-top: var(--pad);
         font-family: var(--monospace);
+        // Phase 3: Smooth dropdown transitions
+        transition: padding 0.2s ease-out, border-color 0.2s ease-out;
+        
+        &[open] {
+            padding-top: var(--pad);
+        }
+        
+        summary {
+            cursor: pointer;
+            transition: color 0.15s ease-out;
+            
+            &:hover {
+                color: var(--color-sub);
+            }
+            
+            &:focus-visible {
+                outline: 2px solid var(--color-primary);
+                outline-offset: 2px;
+            }
+        }
     }
 }
 
@@ -1065,11 +1351,25 @@ ETC
     text-align: center;
     margin: 1rem auto;
     width: 400px;
+    // Phase 3: Smooth button state transitions
+    transition: all 0.15s ease-out, transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    
     &:hover {
         cursor: pointer;
         color: var(--color-sub);
         border-color: var(--color-sub);
+        transform: scale(1.02);
     }
+    
+    &:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+    
+    &:active {
+        transform: scale(0.98);
+    }
+    
     .icon {
         vertical-align: bottom;
     }

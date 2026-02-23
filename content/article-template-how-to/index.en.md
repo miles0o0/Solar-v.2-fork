@@ -1,12 +1,12 @@
 ---
 title: "Article Template: How to write articles and translations in Markdown for Hugo?"
-date: ""
+date: "2024-01-01"
 summary: "This page goes over the specific markdown syntax that should be used to write articles, add translations and comments in the new hugo solar web. "
 lang: "en"
 authors: ["Marie Verdeil"]
-categories: [""]
-tags: [""]
-unlisted: true
+categories: ["Ongoing Projects"]
+tags: ["documentation"]
+type: "posts"
 draft: false
 featured_image: "image.png"
 ---
@@ -15,24 +15,7 @@ featured_image: "image.png"
 A screenshot of the markdown file for this page.
 {{% /figure %}}
 
-## Table of Contents
 
-- [Files](#files) 
-    - [Structure](#structure)
-     - [Creating a new article](#folder-name)
-    - [Index](#index)
-    - [Comments file](#comments-files)
-- [Article Syntax](#syntax)
-    - [Front Matter](#front-matter)
-    - [Syntax rules](#rules)
-    - [Main rules](#main-rules)
-    - [Internal links](#internal-links)
-- [Image shortcodes](#syntax-images)
-- [Comments](#syntax-comments)
-- [Translations](#translations)
-    - [Translations front matter](#translations-front-matter)
-    - [Translations internal links](#translations-internal-links)
-    - [Translations of site metadata](#translations-meta)
     
 
 ## Files {#files}

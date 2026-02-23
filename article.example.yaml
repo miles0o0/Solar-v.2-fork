@@ -1,0 +1,98 @@
+# Example Article Definition
+# This is a template showing the YAML format for creating articles
+# 
+# Usage:
+#   1. Copy this file: cp article.example.yaml my-new-article.yaml
+#   2. Edit my-new-article.yaml with your article content
+#   3. Create a folder with images: mkdir article-images/
+#   4. Place your images in article-images/
+#   5. Run: ./scripts/create-article.sh my-new-article.yaml --source-dir ./article-images
+
+metadata:
+  # Article title (required)
+  title: "Solar Powered Website Design"
+  
+  # URL slug - becomes part of the URL path (required)
+  # Rules: lowercase, hyphens for spaces, no special characters
+  # Example: "solar-powered-website" → /posts/solar-powered-website/
+  slug: "solar-powered-website-design"
+  
+  # Publication date in YYYY-MM-DD format (required)
+  date: "2025-02-23"
+  
+  # Short description for listings and RSS (required)
+  summary: "A comprehensive guide to designing websites that function efficiently on solar power"
+  
+  # Language code: en, es, fr, de, nl, etc. (required)
+  language: "en"
+  
+  # List of article authors (required)
+  authors:
+    - "Your Name"
+  
+  # Article categories - must match site's taxonomy (required)
+  # Options: "On Going Projects", "Project Outputs", "Other"
+  categories:
+    - "On Going Projects"
+  
+  # Optional: Article tags for organization
+  tags:
+    - "solar"
+    - "web-design"
+  
+  # Optional: Featured image filename (shows in listings)
+  featured_image: "solar-panels.jpg"
+
+# Main article content in Markdown format (required)
+# Supports all standard Markdown syntax plus Hugo shortcodes
+content: |
+  ## Introduction
+  
+  This article explores the principles of designing websites optimized for solar-powered infrastructure.
+  
+  {{% figure src="solar-panels.jpg" %}}
+  Solar panel array providing power to the web server
+  {{% /figure %}}
+  
+  ## Why Solar Powered Websites Matter
+  
+  - Reduced environmental impact
+  - Enhanced resilience in unreliable power environments
+  - Practical sustainability
+  
+  ### Key Design Principles
+  
+  **Minimize Energy Consumption**:
+  - Optimize images and assets
+  - Reduce JavaScript and processing
+  - Use static HTML over dynamic generation
+  
+  **Work Offline**:
+  - Cache critical resources
+  - Support degraded functionality
+  - Plan for intermittent connectivity
+  
+  ## Technical Implementation
+  
+  ```bash
+  # Build static site
+  hugo
+  
+  # Serve with minimal overhead
+  hugo server
+  ```
+  
+  ## Conclusion
+  
+  Building for solar power isn't just about sustainability—it's about creating resilient systems that work anywhere.
+
+# List of images used in the article
+# These will be copied and automatically dithered for bandwidth optimization
+images:
+  # Filename in your image directory (required)
+  - filename: "solar-panels.jpg"
+  
+  - filename: "solar-charge-controller.png"
+  
+  # You can add as many images as needed
+  - filename: "battery-bank-setup.jpg"

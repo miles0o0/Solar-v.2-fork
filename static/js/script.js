@@ -118,17 +118,21 @@ function populateDashboard(data) {
 
 // language menu toggle
 const langmenu = document.getElementById('lang-menu');
-langmenu.addEventListener('click', function() {
-    console.log('togglelanguages');
-    document.getElementById('languages').classList.toggle("lang-expanded");
-});
+if (langmenu) {
+    langmenu.addEventListener('click', function() {
+        console.log('togglelanguages');
+        document.getElementById('languages').classList.toggle("lang-expanded");
+    });
+}
 
 //mobile menu toggle
 const mobilemenu = document.getElementById('m-btn');
-mobilemenu.addEventListener('click', function() {
-    console.log('togglemenu');
-    document.getElementById('menu-list').classList.toggle("show");
-});
+if (mobilemenu) {
+    mobilemenu.addEventListener('click', function() {
+        console.log('togglemenu');
+        document.getElementById('menu-list').classList.toggle("show");
+    });
+}
 
 
 const comments = document.querySelectorAll('.comment');
@@ -139,19 +143,22 @@ if ( comments.length > 0 ){
 
 
 const dither_icons = document.querySelectorAll('.dither-toggle');
-dither_icons.forEach(icon => {
-	icon.addEventListener('click', function() {
-	    let figure = icon.closest('.figure-controls').previousElementSibling;
-	    let img = figure.querySelector('img');
 
-	    if( figure.getAttribute('data-imgstate') == "dither"){
-	    	figure.setAttribute('data-imgstate', 'undither');	    	
+dither_icons.forEach((icon, index) => {
+	icon.addEventListener('click', function(e) {
+	    let figControls = icon.closest('.figure-controls');
+	    let figure = figControls.previousElementSibling;
+	    let img = figure?.querySelector('img');
+	    if(!img) return;
+	    let state = figure.getAttribute('data-imgstate');
+	    if(state == "dither"){
+	    	figure.setAttribute('data-imgstate', 'undither');
 	    	let original = img.getAttribute('data-original');
 	    	img.src = original;
 	    }else{
 	    	figure.setAttribute('data-imgstate', 'dither');
-	    	let dither= img.getAttribute('data-dither');
+	    	let dither = img.getAttribute('data-dither');
 	    	img.src = dither;
-	    }    
+	    }
 	});
 });
